@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Complaint Box | Clean & Secure</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.5);
+            --bg: #09090b;
+            --card-bg: rgba(24, 24, 27, 0.8);
+            --border: rgba(255, 255, 255, 0.1);
+            --text-main: #fafafa;
+            --text-dim: #a1a1aa;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(circle at 0% 0%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* UTILITIES */
+        .hidden {
+            display: none !important;
+        }
+
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+        }
+
+        /* NAVIGATION */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            background: rgba(9, 9, 11, 0.8);
+            backdrop-filter: blur(8px);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* LANDING PAGE */
+        #landing-page {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        /* BUTTONS */
+        .btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px var(--primary-glow);
+            filter: brightness(1.1);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background: var(--border);
+        }
+
+        /* LOGIN BOX */
+        #login-page {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            color: var(--text-dim);
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: white;
+            font-family: inherit;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--primary);
+        }
+
+        /* DASHBOARD */
+        #dashboard-page {
+            padding: 120px 5% 60px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            margin-bottom: 40px;
+        }
+
+        .complaint-box {
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        textarea {
+            height: 120px;
+            resize: none;
+            margin-bottom: 20px;
+        }
+
+        /* COMPLAINT LIST */
+        .feed-title {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .complaint-card {
+            padding: 24px;
+            margin-bottom: 16px;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ai-response {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .ai-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
+        .ai-text {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .timestamp {
+            font-size: 0.75rem;
+            color: #52525b;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+        const GEMINI_API_KEY = "PASTE_KEY_HERE";
+        // To use: fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, { ... })
+    </script>
+
+    <nav>
+        <div class="logo">CAMPUS COMPLAINT BOX</div>
+        <div id="nav-actions">
+            <button class="btn btn-outline" onclick="showPage('landing-page')">Home</button>
+        </div>
+    </nav>
+
+    <section id="landing-page">
+        <h1 class="hero-title">Voices Heard.<br><span style="color: var(--primary)">Campus Improved.</span></h1>
+        <p class="hero-subtitle">The modern, anonymous, and efficient way to report campus issues. Powered by
+            intelligence to ensure every concern reaches the right ears.</p>
+        <button class="btn btn-primary" onclick="showPage('login-page')">Get Started</button>
+    </section>
+
+    <section id="login-page" class="hidden">
+        <div class="login-card glass">
+            <h2 style="margin-bottom: 10px;">Welcome Back</h2>
+            <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.9rem;">Login to manage your complaints
+            </p>
+
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="username" placeholder="e.g. pranay_sb">
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="••••••••">
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 12px;"
+                onclick="handleLogin()">Login</button>
+            <button class="btn btn-outline" style="width: 100%;" onclick="handleDemoLogin()">Demo Login</button>
+        </div>
+    </section>
+
+    <section id="dashboard-page" class="hidden">
+        <div class="dashboard-header">
+            <h1>Hello, <span id="user-display" style="color: var(--primary)">Student</span></h1>
+            <p style="color: var(--text-dim)">Submit a new complaint or track existing ones.</p>
+        </div>
+
+        <div class="complaint-box glass">
+            <h3 style="margin-bottom: 15px;">New Complaint</h3>
+            <textarea id="complaint-input"
+                placeholder="Describe the issue in detail... (e.g. Water cooler on 3rd floor not working)"></textarea>
+            <div style="display: flex; justify-content: flex-end;">
+                <button class="btn btn-primary" onclick="submitComplaint()">Submit Complaint</button>
+            </div>
+        </div>
+
+        <div class="feed-title">
+            <div style="width: 8px; height: 8px; background: var(--primary); border-radius: 50%;"></div>
+            Recent Activity
+        </div>
+
+        <div id="complaint-list">
+        </div>
+    </section>
+
+    <script>
+        // PAGE ROUTING
+        function showPage(pageId) {
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        // LOGIN LOGIC
+        function handleLogin() {
+            const user = document.getElementById('username').value;
+            if (user.trim()) {
+                loginSuccess(user);
+            } else {
+                alert("Please enter a username");
+            }
+        }
+
+        function handleDemoLogin() {
+            loginSuccess("Demo User");
+        }
+
+        function loginSuccess(username) {
+            document.getElementById('user-display').innerText = username;
+            showPage('dashboard-page');
+            loadComplaints();
+        }
+
+        // COMPLAINT LOGIC
+        const aiReplies = [
+            "We have forwarded your issue to the respective department.",
+            "Your complaint is under review by campus maintenance.",
+            "Thanks for reporting. We aim to resolve this within 48 hours.",
+            "An administrator has been notified of this situation.",
+            "This issue has been logged into our priority tracking system."
+        ];
+
+        function submitComplaint() {
+            const input = document.getElementById('complaint-input');
+            const text = input.value.trim();
+
+            if (!text) {
+                alert("Please describe the issue.");
+                return;
+            }
+
+            const randomReply = aiReplies[Math.floor(Math.random() * aiReplies.length)];
+
+            const newComplaint = {
+                id: Date.now(),
+                text: text,
+                reply: randomReply,
+                date: new Date().toLocaleString()
+            };
+
+            // Save to LocalStorage
+            let complaints = JSON.parse(localStorage.getItem('campus_complaints') || '[]');
+            complaints.unshift(newComplaint);
+            localStorage.setItem('campus_complaints', JSON.stringify(complaints));
+
+            // UI Reset
+            input.value = "";
+            loadComplaints();
+        }
+
+        function loadComplaints() {
+            const container = document.getElementById('complaint-list');
+            const complaints = JSON.parse(localStorage.getItem('campus_complaints') || '[]');
+
+            if (complaints.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-dim); text-align: center; padding: 40px;">No complaints found. Your campus is looking good!</p>`;
+                return;
+            }
+
+            container.innerHTML = complaints.map(c => `
+                <div class="complaint-card glass">
+                    <p style="font-weight: 600; font-size: 1.1rem;">${c.text}</p>
+                    <div class="ai-response">
+                        <span class="ai-badge">AI Assistant</span>
+                        <p class="ai-text">${c.reply}</p>
+                    </div>
+                    <p class="timestamp">Submitted on ${c.date}</p>
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        window.onload = loadComplaints;
+    </script>
+</body>
+
+</html>
